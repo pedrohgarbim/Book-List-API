@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Book } from '../book';
 import { CommonModule } from '@angular/common';
+import { BookService } from '../book.service';
 
 @Component({
   selector: 'app-book-list',
@@ -9,14 +10,23 @@ import { CommonModule } from '@angular/common';
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.css'
 })
-export class BookListComponent {
+export class BookListComponent implements OnInit {
+
 
   books: Book[] = [
-    { id: 1, author: "Leo Tolstoy", title: "War and Peace" },
-    { id: 2, author: "Leo Tolstoy", title: "Anna Karenina" },
-    { id: 3, author: "Mikhail Bulgakov", title: "The Master and Margarita" },
-    { id: 4, author: "Julius Caesar", title: "The Gallic Wars" }
+
 
   ]
+
+  constructor(private bookService: BookService) { }
+
+  ngOnInit() { // Lifecycle Hook
+    this.getBooks()
+  }
+
+  getBooks(): void {
+    this.bookService.getBooks()
+      .subscribe(booksFromApi => this.books = booksFromApi)
+  }
 
 }
